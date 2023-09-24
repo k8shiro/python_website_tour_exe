@@ -9,6 +9,10 @@ def load_urls_from_json(json_file):
 def main():
     urls = load_urls_from_json('urls.json')
     chromium_executable_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+
+    # スクロールの単位ピクセル数
+    scroll_step = 200
+
     with sync_playwright() as p:
         browser = p.chromium.launch(executable_path=chromium_executable_path, headless=False)
         page = browser.new_page()
