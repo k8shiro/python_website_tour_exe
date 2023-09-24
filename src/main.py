@@ -4,7 +4,7 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch({channel: 'chrome'})
         page = browser.new_page()
-        page.goto('https://playwright.dev/')]
+        page.goto('https://playwright.dev/')
         page.wait_for_timeout(3000)
 
 
