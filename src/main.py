@@ -29,6 +29,7 @@ def main():
                 scroll_position = page.evaluate('window.scrollY')
                 
                 # スクロールが下部に到達した場合、ループを終了
+                print(scroll_position, page_height)
                 if scroll_position >= page_height:
                     break
                 
