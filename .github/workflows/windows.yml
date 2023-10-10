@@ -27,3 +27,17 @@ jobs:
         with:
           name: result-artifact
           path: ./windows/dist/
+
+      - name: Compress files into ZIP
+        run: |
+          Add-Type -assembly "system.io.compression.filesystem"
+          [io.compression.zipfile]::CreateFromDirectory('.\windows\dist\', '.\windows\python_website_tour_exe.zip')
+        shell: powershell
+
+      - name: Upload ZIP artifact to Releases
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./windows/python_website_tour_exe.zip
+          asset_name: python_website_tour_exe.zip
+          asset_content_type: application/zip
