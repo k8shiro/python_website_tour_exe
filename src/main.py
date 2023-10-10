@@ -14,10 +14,9 @@ def load_settings_from_json():
 def main():
     urls = load_urls_from_json()
     settings = load_settings_from_json()
-    chromium_executable_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-
-    # スクロールの単位ピクセル数
-    scroll_step = 200
+    
+    chromium_executable_path = settings['chromium_executable_path'] # chrome.exeのpath
+    scroll_step = settings['scroll_step']                           # スクロールの単位ピクセル数
 
     with sync_playwright() as p:
         browser = p.chromium.launch(executable_path=chromium_executable_path, headless=False)
