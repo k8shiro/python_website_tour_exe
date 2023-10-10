@@ -19,7 +19,7 @@ def main():
     scroll_step = settings['scroll_step']                           # スクロールの単位ピクセル数
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(executable_path=chrome_path, headless=False)
+        browser = p.chromium.launch(executable_path=chrome_path, headless=False, args=["--start-maximised"], no_viewport=True)
         page = browser.new_page()
 
         for url in urls:
