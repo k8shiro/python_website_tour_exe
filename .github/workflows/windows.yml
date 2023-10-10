@@ -33,7 +33,7 @@ jobs:
         shell: powershell
 
       - name: Upload ZIP to Releases
-        if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
+        #if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
