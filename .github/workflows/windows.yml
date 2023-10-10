@@ -32,13 +32,24 @@ jobs:
         run: Compress-Archive -Path .\windows\dist\ -DestinationPath .\windows\python_website_tour_exe.zip
         shell: powershell
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
       - name: Upload ZIP to Releases
         #if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.get_url.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: .\windows\python_website_tour_exe.zip
           asset_name: python_website_tour_exe.zip
           asset_content_type: application/zip
