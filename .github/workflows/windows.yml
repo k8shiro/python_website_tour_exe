@@ -28,16 +28,15 @@ jobs:
           name: result-artifact
           path: ./windows/dist/
 
-      - name: Compress files into ZIP
-        run: |
-          Add-Type -assembly "system.io.compression.filesystem"
-          [io.compression.zipfile]::CreateFromDirectory('.\windows\dist\', '.\windows\python_website_tour_exe.zip')
+      - name: Create ZIP Archive
+        run: Compress-Archive -Path .\windows\dist\ -DestinationPath .\windows\python_website_tour_exe.zip
         shell: powershell
 
-      - name: Upload ZIP artifact to Releases
+      - name: Upload ZIP to Releases
+        if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url}}
-          asset_path: ./windows/python_website_tour_exe.zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: .\windows\python_website_tour_exe.zip
           asset_name: python_website_tour_exe.zip
           asset_content_type: application/zip
