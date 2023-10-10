@@ -35,8 +35,10 @@ jobs:
       - name: Upload ZIP to Releases
         if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{ steps.get_url.outputs.upload_url }}
           asset_path: .\windows\python_website_tour_exe.zip
           asset_name: python_website_tour_exe.zip
           asset_content_type: application/zip
