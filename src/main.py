@@ -1,13 +1,19 @@
 from playwright.sync_api import sync_playwright
 import json
 
-def load_urls_from_json(json_file):
-    with open(json_file, 'r') as file:
+def load_urls_from_json():
+    with open('urls.json', 'r') as file:
+        url_list = json.load(file)
+    return url_list
+
+def load_settings_from_json():
+    with open('settings.json', 'r') as file:
         url_list = json.load(file)
     return url_list
 
 def main():
-    urls = load_urls_from_json('urls.json')
+    urls = load_urls_from_json()
+    settings = load_settings_from_json()
     chromium_executable_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 
     # スクロールの単位ピクセル数
