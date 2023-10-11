@@ -25,12 +25,8 @@ jobs:
       - name: Run Docker container
         run: docker run --rm  -v ${{ github.workspace }}\windows\dist\:C:\dist\ python-website-tour-exe-windows powershell -Command "pyinstaller main.py --onedir --onefile --clean --distpath /dist --workpath /windows/build --specpath /windows"
 
-      - name: Create ZIP Archive
-        run: Compress-Archive -Path .\windows\dist\ -DestinationPath .\windows\python_website_tour_exe.zip
-        shell: powershell
-
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: result-artifact
-          path: ./windows/python_website_tour_exe.zip
+          name: python_website_tour_exe
+          path: ./windows/dist/
