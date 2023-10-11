@@ -22,29 +22,33 @@ def main():
         browser = p.chromium.launch(executable_path=chrome_path, headless=False, args=["--start-maximized"])
         page = browser.new_page(no_viewport=True)
 
-        for url in urls:
-            page.goto(url)
-            page.wait_for_timeout(3000)
-            pre_scroll_position = -1
-
+        try:
             while True:
-                # 現在のスクロール位置を取得
-                scroll_position = page.evaluate('window.scrollY')
-                
-                # スクロールが下部に到達した場合、ループを終了
-                print(scroll_position, pre_scroll_position)
-                if scroll_position == pre_scroll_position:
-                    break
-                else:
-                    pre_scroll_position = scroll_position
-                
-                # ページを指定したステップ数分だけスクロール
-                page.evaluate('window.scrollBy(0, {})'.format(scroll_step))
-                
-                # スクロール完了まで待機（必要に応じて適切な待機時間を設定）
-                page.wait_for_timeout(1000)  # 1秒待機（適宜調整）
+                for url in urls:
+                    print(url)
+                    page.goto(url)
+                    page.wait_for_timeout(3000)
+                    pre_scroll_position = -1
 
-        browser.close()
+                    while True:
+                        # 現在のスクロール位置を取得
+                        scroll_position = page.evaluate('window.scrollY')
+                        
+                        # スクロールが下部に到達した場合、ループを終了
+                        print(scroll_position, pre_scroll_position)
+                        if scroll_position == pre_scroll_position:
+                            break
+                        else:
+                            pre_scroll_position = scroll_position
+                        
+                        # ページを指定したステップ数分だけスクロール
+                        page.evaluate('window.scrollBy(0, {})'.format(scroll_step))
+                        
+                        # スクロール完了まで待機（必要に応じて適切な待機時間を設定）
+                        page.wait_for_timeout(1000)  # 1秒待機（適宜調整）
+        except Exception as e:
+            print(e)
+            browser.close()
 
 
 if __name__ == '__main__':
