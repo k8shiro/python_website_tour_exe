@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  create: # タグが作成されたときにもトリガーする
+    tags:
+      - '*'
 
 jobs:
   build-and-run:
@@ -22,34 +25,12 @@ jobs:
       - name: Run Docker container
         run: docker run --rm  -v ${{ github.workspace }}\windows\dist\:C:\dist\ python-website-tour-exe-windows powershell -Command "pyinstaller main.py --onedir --onefile --clean --distpath /dist --workpath /windows/build --specpath /windows"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: result-artifact
-          path: ./windows/dist/
-
       - name: Create ZIP Archive
         run: Compress-Archive -Path .\windows\dist\ -DestinationPath .\windows\python_website_tour_exe.zip
         shell: powershell
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload ZIP to Releases
-        #if: startsWith(github.ref, 'refs/tags/')  # タグが打たれた場合の条件
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .\windows\python_website_tour_exe.zip
-          asset_name: python_website_tour_exe.zip
-          asset_content_type: application/zip
+          name: result-artifact
+          path: ./windows/dist/python_website_tour_exe.zip
